@@ -11,7 +11,7 @@ $('.residents').click(function(event){
     var tableContent = [];
     for (let i = 0; i < links.length; i++){
         $.ajax({
-            url: links[i],
+            url: links[i].slice(0, 3) + 's' + links[i].slice(3),
             method: 'GET',
             async: false,
             success: function (data) {
