@@ -1,11 +1,27 @@
 import psycopg2
+import os
+import urllib
 from connection_data import connection_data
+
+
+def connection():
+    urllib.parse.uses_netloc.append('postgres')
+    url = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
+    connection = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    return connection
 
 
 def run_query(sql_query, variables=(), with_returnvalue=True):
     try:
-        connect_str = "dbname='{}' user='{}' host='{}' password='{}'".format(*connection_data())
-        connection = psycopg2.connect(connect_str)
+        # connect_str = "dbname='{}' user='{}' host='{}' password='{}'".format(*connection_data())
+        # connection = psycopg2.connect(connect_str)
+        connection = connection()
         connection.autocommit = True
         cursor = connection.cursor()
         cursor.execute(sql_query, variables)
