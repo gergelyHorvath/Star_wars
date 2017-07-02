@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Star_Wars_planets</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{{url_for('static', filename='main.js')}}" defer></script>
+    
+</head>
+
+<body>
+    
+    <div class='container'>
+        
+        <header class='row'>
+            <div class='col-12'>
+                {% if not session['username'] %}
+                <a href='/login?mode=first_try'>Login</a>
+                {% endif %}
+                {% if session['username'] %}
+                <a href='/logout'>Logout</a>
+                {% endif %}
+                <a href='/register?mode=reg'>Register</a>
+                <span>{{'Visiting as guest please login or register' if not session['username'] else 'Logged in as ' + session['username']}}</span>
+            </div>
+        </header>
+        
+        <div class='row'>
+            <div class='col-12'>
+                <h1>Star Wars universe planets</h1><br/>
+                
+                {% if page in range(2, 8) %}
+                    <a class='btn btn-primary' href='/swplanets?page={{page-1}}'>Previous</a>
+                {% endif %}
+                {% if page in range(1, 7) %}
+                    <a class='btn btn-primary' href='/swplanets?page={{page+1}}'>Next</a>
+                {% endif %}
+                <table class='table-bordered'>
+                    <tr>
+                        <th>Name</th>
+                        <th>Diameter</th>
+                        <th>Climate</th>
+                        <th>Terrain</th>
+                        <th>Surface water percentage</th>
+                        <th>Population</th>
+                        <th>Residents</th>
+                    </tr>
+                {% for planet in planets %}
+                    <tr>
+                        <td>{{planet.name}}</td>
+                        <td>{{planet.diameter}}</td>
+                        <td>{{planet.climate}}</td>
+                        <td>{{planet.terrain}}</td>
+                        <td>{{planet.surface_water}}</td>
+                        <td>{{planet.population}}</td>
+                        {% if planet.residents %}
+                            <td><button class='btn residents' type='button'
+                                data-name="{{planet.name}}"
+                                data-links="{{planet.residents}}"
+                                >{{planet.residents|length}} resident(s)</button></td>
+                        {% else %}
+                            <td>No known residents</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+
+    </div>
+    </div>
+    
+</body>
+
+</html>

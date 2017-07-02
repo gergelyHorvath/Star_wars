@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{task}}</title>
+</head>
+<body>
+    {% if task == 'login' %}
+        <h1>Login with your username and password</h1>
+    {% else %}
+        <h1>Registration</h1>
+    {% endif %}
+
+    {% if returned %}
+    <h3>{{'Incorrect username or password' if task == 'login' else 'Username already exists'}}<h3>
+    {% endif %}
+
+    <form action="{{'/login_check' if task == 'login' else '/register_check'}}" method='POST'>
+        <label for='username'>Username:</label><br/>
+        <input type='text' id='username' name='username' required pattern='.{3,16}' title='Must be 3 to 16 characters'><br>
+        
+        <label for='password'>Password:</label><br>
+        <input type='password' id='password' name='password' required pattern='.{6,16}' title='Must be 6 to 16 characters'><br>
+        
+        <input type='submit' value='{{task}}'>
+    </form>
+
+
+</body>
+</html>
