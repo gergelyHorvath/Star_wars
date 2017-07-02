@@ -3,7 +3,7 @@ import os
 import urllib
 
 
-def connection():
+def connect_heroku_pg():
     urllib.parse.uses_netloc.append('postgres')
     url = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
     connection = psycopg2.connect(
@@ -20,7 +20,7 @@ def run_query(sql_query, variables=(), with_returnvalue=True):
     try:
         # connect_str = "dbname='{}' user='{}' host='{}' password='{}'".format(*connection_data())
         # connection = psycopg2.connect(connect_str)
-        connection = connection()
+        connection = connect_heroku_pg()
         connection.autocommit = True
         cursor = connection.cursor()
         cursor.execute(sql_query, variables)
