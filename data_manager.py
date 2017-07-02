@@ -1,7 +1,6 @@
 import psycopg2
 import os
 import urllib
-from connection_data import connection_data
 
 
 def connection():
