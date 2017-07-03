@@ -6,7 +6,7 @@ from flask import Flask, redirect, render_template, request, url_for, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = '1p2o3I5j R,.cZ5!Q91%A $X'
 
 
 @app.before_request
