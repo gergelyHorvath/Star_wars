@@ -48,7 +48,52 @@ $('.residents').click(function(event){
         htmlstring += '</tr>';
     }
     htmlstring += "</table>"
-    debugger;
     $('.modal-body').html(htmlstring);
     $('#myModal').modal('show');
 });
+
+$('.votable').click(function(event){
+    var $button = $(event.target);
+    $button.removeClass("votable").addClass("voted");
+    var stuff = {
+            planet_id: $button.data('planetid'),
+            planet_name: $button.data('planetname')
+    };
+    $.ajax({
+        url: '/savevote',
+        type: 'POST',
+        data: {
+            planet_id: $button.data('planetid'),
+            planet_name: $button.data('planetname')
+        },
+        success: function (data) {
+            $button.removeClass("btn-primary").addClass("btn-warning");
+        }
+    });
+    
+});
+
+$('#statistics').click(function(event){
+    $('.modal-title').text('Voting statistics');
+    $.ajax({
+        url: '/statistics',
+        type: 'GET',
+        success: function (data) {
+            var htmlstring = `<table class='table-bordered'>
+                <tr>
+                    <th>Planet</th>
+                    <th>Number of votes</th>
+                </tr>`
+            var statistics = data.statistics;
+            for (let row=0; row < statistics.length; row++) {
+                htmlstring += '<tr>';
+                htmlstring += '<td>' + statistics[row].name + '</td>';
+                htmlstring += '<td>' + statistics[row].count + '</td></tr>';
+            }
+            htmlstring += "</table>"
+            $('.modal-body').html(htmlstring);
+            $('#myModal').modal('show');
+        }
+    });
+});
+    

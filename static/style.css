@@ -7,7 +7,13 @@
 td ,th {
     padding: 5px;
 }
-#myModal .modal-dialog  {
-    width: 45ÄÄÄ%;
+
+#errormsg {
+    color: red;
 }
+
+.btn {
+    margin: 2px 0;
+}
+
 

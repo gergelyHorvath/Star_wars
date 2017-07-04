@@ -1,3 +1,11 @@
+
+ALTER TABLE IF EXISTS ONLY users DROP CONSTRAINT IF EXISTS users_pk CASCADE;
+ALTER TABLE IF EXISTS ONLY users DROP CONSTRAINT IF EXISTS username_uk CASCADE;
+
+ALTER TABLE IF EXISTS ONLY votes DROP CONSTRAINT IF EXISTS votes_pk CASCADE;
+ALTER TABLE IF EXISTS ONLY votes DROP CONSTRAINT IF EXISTS fk_user_id CASCADE;
+
+
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS users_id_seq;
 CREATE TABLE users (
@@ -13,8 +21,6 @@ CREATE TABLE votes (
     id serial NOT NULL,
     planet_id integer NOT NULL,
     planet_name character varying(255) NOT NULL,
-    nick_name character varying(255),
-    phone_number character varying(100) NOT NULL,
     user_id integer NOT NULL,
     submission_time char(16) default to_char(LOCALTIMESTAMP, 'YYYY-MM-DD HH24:MI')
 );

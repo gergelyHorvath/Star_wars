@@ -2,7 +2,7 @@ import data_manager
 import requests
 import json
 import os
-from flask import Flask, redirect, render_template, request, url_for, session
+from flask import Flask, redirect, render_template, request, url_for, session, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -27,15 +27,23 @@ def listpage():
     page = request.args['page']
     req = requests.get('http://swapi.co/api/planets?page={}'.format(page))
     data = json.loads(req.text)['results']
-    relevant_data = [{
-        'name': planet['name'],
-        'diameter': planet['diameter'] + (' km' if planet['diameter'] != 'unknown' else ''),
-        'climate': planet['climate'],
-        'terrain': planet['terrain'],
-        'surface_water': planet['surface_water'] + (' %' if planet['surface_water'] != 'unknown' else ''),
-        'population': planet['population'] + (' people' if planet['population'] != 'unknown' else ''),
-        'residents': planet['residents']
-    } for planet in data]
+    relevant_data = []
+    for planet in data:
+        planet_id = int(''.join([c for c in planet['url'] if c.isdigit()]))
+        if session['username']:
+            votable = data_manager.votable(planet_id, session['user_id'])
+        else:
+            votable = False
+        relevant_data.append({
+            'name': planet['name'],
+            'diameter': planet['diameter'] + (' km' if planet['diameter'] != 'unknown' else ''),
+            'climate': planet['climate'],
+            'terrain': planet['terrain'],
+            'surface_water': planet['surface_water'] + (' %' if planet['surface_water'] != 'unknown' else ''),
+            'population': planet['population'] + (' people' if planet['population'] != 'unknown' else ''),
+            'residents': planet['residents'],
+            'id': [planet_id, votable]
+        })
     return render_template('listpage.html', planets=relevant_data, page=int(page))
 
 
@@ -81,6 +89,19 @@ def register_check():
         data_manager.add_user(username, password)
         return redirect('/')
 
+@app.route('/savevote', methods=['POST'])
+def savevote():
+    planet_id = request.form['planet_id']
+    planet_name = request.form['planet_name']
+    data_manager.add_vote(session['user_id'], planet_id, planet_name)
+    return jsonify({'answer': 'OK!'})
+
+
+@app.route('/statistics')
+def statistics():
+    votes = data_manager.get_statistics()
+    return jsonify({'statistics': votes})
+
 
 if __name__ == ('__main__'):
-    app.run()
+    app.run(debug=True)

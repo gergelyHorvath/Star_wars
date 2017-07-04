@@ -24,12 +24,13 @@
         <header class='row'>
             <div class='col-12'>
                 {% if not session['username'] %}
-                <a href='/login?mode=first_try'>Login</a>
+                <a href='/login?mode=first_try' class="btn btn-default" type="button">Login</a>
                 {% endif %}
                 {% if session['username'] %}
-                <a href='/logout'>Logout</a>
+                <a href='/logout' class="btn btn-default" type="button">Logout</a>
                 {% endif %}
-                <a href='/register?mode=reg'>Register</a>
+                <a href='/register?mode=reg' class="btn btn-default" type="button">Register</a>
+                <span><button id="statistics" class="btn btn-default" type="button" >Voting statistics</button></span>
                 <span>{{'Visiting as guest please login or register' if not session['username'] else 'Logged in as ' + session['username']}}</span>
             </div>
         </header>
@@ -53,6 +54,9 @@
                         <th>Surface water percentage</th>
                         <th>Population</th>
                         <th>Residents</th>
+                    {% if session['username'] %}
+                        <th>Vote</th>
+                    {% endif %}
                     </tr>
                 {% for planet in planets %}
                     <tr>
@@ -70,6 +74,12 @@
                         {% else %}
                             <td>No known residents</td>
                         {% endif %}
+                        {% if session['username'] %}
+                            <td>
+                            <button class="btn btn-{{'primary' if planet.id[1] else 'warning'}} {{'votable' if planet.id[1] else 'voted'}}"
+                            type="button" data-planetid="{{planet.id[0]}}" data-planetname={{planet.name}}>Vote</button>
+                            </td>
+                    {% endif %}
                     </tr>
                 {% endfor %}
 

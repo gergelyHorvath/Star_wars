@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{task}}</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
+    
+    <div class="container">
     {% if task == 'login' %}
         <h1>Login with your username and password</h1>
     {% else %}
@@ -14,7 +18,7 @@
     {% endif %}
 
     {% if returned %}
-    <h3>{{'Incorrect username or password' if task == 'login' else 'Username already exists'}}<h3>
+    <h3 id="errormsg">{{'Incorrect username or password' if task == 'login' else 'Username already exists'}}<h3>
     {% endif %}
 
     <form action="{{'/login_check' if task == 'login' else '/register_check'}}" method='POST'>
@@ -24,8 +28,10 @@
         <label for='password'>Password:</label><br>
         <input type='password' id='password' name='password' required pattern='.{6,16}' title='Must be 6 to 16 characters'><br>
         
-        <input type='submit' value='{{task}}'>
+        <input type='submit' class="btn btn-primary" value='{{task}}'>
+        <a class="btn btn-default" type="button" href="/">Back to main</a>
     </form>
+    </div>
 
 
 </body>
