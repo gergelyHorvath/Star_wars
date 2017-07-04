@@ -89,6 +89,7 @@ def register_check():
         data_manager.add_user(username, password)
         return redirect('/')
 
+
 @app.route('/savevote', methods=['POST'])
 def savevote():
     planet_id = request.form['planet_id']
@@ -104,4 +105,4 @@ def statistics():
 
 
 if __name__ == ('__main__'):
-    app.run(debug=True)
+    app.run(debug)

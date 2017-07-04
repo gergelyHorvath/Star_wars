@@ -3,6 +3,7 @@ import os
 import urllib
 from connection_data import connection_data
 
+
 def connect_heroku_pg():
     urllib.parse.uses_netloc.append('postgres')
     url = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
@@ -77,6 +78,3 @@ def get_statistics():
     result = run_query(sql_query)
     result = [{'name': planet[0], 'count': planet[1]}for planet in result]
     return result
-
-
-
